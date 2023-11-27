@@ -11,6 +11,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 TOKEN = "6743689178:AAHt0ePvr3SPh3nHWn63eqZJKucoKmiv6BE"
 
+
 storage = MemoryStorage()
 
 bot = Bot(token = TOKEN)
@@ -43,58 +44,77 @@ async def spend(message: types.Message):
 
 
 # Приход инлайн ответ на кэлбэки первого уровня
-# @dp.callback_query_handler(lambda c: c.data == 'button1')
+# ------------------------------------Приход денег, вывод новых кнопок---------------------------------
 async def topup_callback_button1(callback_query: types.CallbackQuery):
     await bot.send_message(callback_query.from_user.id, "Выбери", reply_markup = InlineKeyboardMarkup()
                             .add(InlineKeyboardButton('Пылесос', callback_data = 'top_up_vacuumcleaner'))
 							.add(InlineKeyboardButton('Go pro', callback_data = 'top_up_gopro'))
                             .add(InlineKeyboardButton('Мойщик окон', callback_data = 'top_up_robot')))
-
-async def topup_callback_button2(callback_query: types.CallbackQuery):
-    await Form.top.set()
-    xr.insert(0, "Товар")
-    await bot.send_message(callback_query.from_user.id, "Надеюсь ты скоро дойдешь до сюда, баклан")
+    await callback_query.answer()
 
 async def topup_callback_button3(callback_query: types.CallbackQuery):
     await bot.send_message(callback_query.from_user.id, "Выбери", reply_markup = InlineKeyboardMarkup()
                             .add(InlineKeyboardButton('Прошлый месяц', callback_data = 'top_up_hairdresser_last'))
 							.add(InlineKeyboardButton('Этот месяц', callback_data = 'top_up_hairdresser_now')))
-
-async def topup_callback_button4(callback_query: types.CallbackQuery):
-    await Form.top_month.set()
-    xr.insert(0, "Банк")
-    await bot.send_message(callback_query.from_user.id, "Введи сумму за прошлый месяц")
+    await callback_query.answer()
 
 async def topup_callback_button5(callback_query: types.CallbackQuery):
     await bot.send_message(callback_query.from_user.id, "Выбери", reply_markup = InlineKeyboardMarkup()
                             .add(InlineKeyboardButton('Эхолот', callback_data = 'top_up_eholot')))
+    await callback_query.answer()
 
+async def topup_callback_button2(callback_query: types.CallbackQuery):
+    await bot.send_message(callback_query.from_user.id, "Выбери", reply_markup = InlineKeyboardMarkup()
+                            .add(InlineKeyboardButton('Ведро 6л', callback_data = 'top_up_6litr'))
+							.add(InlineKeyboardButton('Ведро 8л', callback_data = 'top_up_8litr')))
+    await callback_query.answer()
 
-
+# ------------------------------------Приход денег, ввод данных в гугл таблицы---------------------------------
+async def topup_callback_button2_6l(callback_query: types.CallbackQuery):
+    await Form.top.set()
+    xr.insert(0, "Ведро 6 литров")
+    await bot.send_message(callback_query.from_user.id, "Введи выручку от ведра 6л")
+    await callback_query.answer()
+async def topup_callback_button2_8l(callback_query: types.CallbackQuery):
+    await Form.top.set()
+    xr.insert(0, "Ведро 8 литров")
+    await bot.send_message(callback_query.from_user.id, "Введи выручку от ведра 8л")
+    await callback_query.answer()
+async def topup_callback_button4(callback_query: types.CallbackQuery):
+    await Form.top_month.set()
+    xr.insert(0, "Банк")
+    await bot.send_message(callback_query.from_user.id, "Введи сумму за прошлый месяц")
+    await callback_query.answer()
 async def top_up_vacuumcleaner(callback_query: types.CallbackQuery):
     await Form.top.set()
     xr.insert(0, "Пылесос")
     await bot.send_message(callback_query.from_user.id, "Введи сумму")
+    await callback_query.answer()
 async def top_up_gopro(callback_query: types.CallbackQuery):
     await Form.top.set()
     xr.insert(0, "Го про")
     await bot.send_message(callback_query.from_user.id, "Введи сумму")
+    await callback_query.answer()
 async def top_up_robot(callback_query: types.CallbackQuery):
     await Form.top.set()
     xr.insert(0, "Робот")
     await bot.send_message(callback_query.from_user.id, "Введи сумму")
+    await callback_query.answer()
 async def top_up_hairdresser_last(callback_query: types.CallbackQuery):
     await Form.top_month.set()
     xr.insert(0, "Парикмахерская")
     await bot.send_message(callback_query.from_user.id, "Введи сумму")
+    await callback_query.answer()
 async def top_up_hairdresser_now(callback_query: types.CallbackQuery):
     await Form.top.set()
     xr.insert(0, "Парикмахерская")
     await bot.send_message(callback_query.from_user.id, "Введи сумму")
+    await callback_query.answer()
 async def top_up_eholot(callback_query: types.CallbackQuery):
     await Form.top.set()
     xr.insert(0, "Эхолот")
     await bot.send_message(callback_query.from_user.id, "Введи сумму")
+    await callback_query.answer()
 
 
 
@@ -105,36 +125,43 @@ async def spend_callback_button1(callback_query: types.CallbackQuery):
                             .add(InlineKeyboardButton('Go pro', callback_data = 'spend_gopro'))
 							.add(InlineKeyboardButton('Пылесос', callback_data = 'spend_vacuum')))
                             # .add(InlineKeyboardButton('Робот мойщик окон', callback_data = 'spend_robot')))
+    await callback_query.answer()
 
 async def spend_callback_button2(callback_query: types.CallbackQuery):#, state: FSMContext):
     await Form.price.set()
     xr.insert(0, "Товар")
     await bot.send_message(callback_query.from_user.id, "Расходы на товарку")
+    await callback_query.answer()
 
 async def spend_callback_button3(callback_query: types.CallbackQuery):
     await Form.price.set()
     xr.insert(0, "Повседневные")
     await bot.send_message(callback_query.from_user.id, "Повседневные расходы за сегодня:")
+    await callback_query.answer()
 
 async def spend_callback_button4(callback_query: types.CallbackQuery):
     await Form.price.set()
     xr.insert(0, "Парикмахерская")
-    await bot.send_message(callback_query.from_user.id, "Парикмахерская:")
+    await bot.send_message(callback_query.from_user.id, "Парикмахерская расходы:")
+    await callback_query.answer()
 
 async def spend_callback_button5(callback_query: types.CallbackQuery):
     await Form.price.set()
     xr.insert(0, "Аренда сибирка")
     await bot.send_message(callback_query.from_user.id, "Потратил на арендные товары для сибирки:")
+    await callback_query.answer()
 
 # Трата инлайн ответ на кэлбэки ВТОРОГО уровня
 async def spend_rent_gopro(callback_query: types.CallbackQuery):
     await Form.price.set()
     xr.insert(0, "Го про")
     await bot.send_message(callback_query.from_user.id, "Потратил на го про сегодня:")
+    await callback_query.answer()
 async def spend_rent_vacuum(callback_query: types.CallbackQuery):
     await Form.price.set()
     xr.insert(0, "Пылесос")
     await bot.send_message(callback_query.from_user.id, "Потратил на пылесос сегодня:")
+    await callback_query.answer()
 # async def spend_rent_robot(call: types.CallbackQuery):
 #     await Form.price.set()
 #     xr.insert(0, "Робот")
@@ -149,7 +176,7 @@ async def load_spend(message: types.Message, state: FSMContext):
         data['price'] = message.text
     current_date = datetime.now().date()
     append_values("B4:D4", current_date, f"{xr[0]}", f"{data['price']}")
-    await bot.send_message(message.from_user.id, f"Добавлены траты на {xr[0]} в размере: {data['price']}")
+    await bot.send_message(message.from_user.id, f"Добавлены траты на {xr[0]} в размере: {data['price']}", reply_markup=start_kb)
     await state.finish()
 
 # пополнение
@@ -158,7 +185,7 @@ async def load_up(message: types.Message, state: FSMContext):
         data['price'] = message.text
     current_date = datetime.now().date()
     append_values("F4:H4", current_date, f"{xr[0]}", f"{data['price']}")
-    await bot.send_message(message.from_user.id, f"Доходы от {xr[0]} в размере: {data['price']} добавлены")
+    await bot.send_message(message.from_user.id, f"Доходы от {xr[0]} в размере: {data['price']} добавлены", reply_markup=start_kb)
     await state.finish()
 
 
@@ -171,7 +198,7 @@ async def load_up_last(message: types.Message, state: FSMContext):
     year = now.year - 1 if last_month == 12 else now.year
     # last_year = now.year - 1
     append_values("F4:H4", f"{year}-{last_month}-01", f"{xr[0]}", f"{data['price']}")
-    await bot.send_message(message.from_user.id, f"Доходы за прошлый месяяц от {xr[0]} в размере: {data['price']} добавлены")
+    await bot.send_message(message.from_user.id, f"Доходы за прошлый месяц от {xr[0]} в размере: {data['price']} добавлены", reply_markup=start_kb)
     await state.finish()
 
 # # Отмена
@@ -204,6 +231,8 @@ def register_handlers_client(dp : Dispatcher):
     dp.register_callback_query_handler(top_up_vacuumcleaner, Text(equals = 'top_up_vacuumcleaner'))
     dp.register_callback_query_handler(top_up_gopro, Text(equals = 'top_up_gopro'))
     dp.register_callback_query_handler(top_up_robot, Text(equals = 'top_up_robot'))
+    dp.register_callback_query_handler(topup_callback_button2_6l, Text(equals = 'top_up_6litr'))
+    dp.register_callback_query_handler(topup_callback_button2_8l, Text(equals = 'top_up_8litr'))
     dp.register_callback_query_handler(top_up_hairdresser_last, Text(equals = 'top_up_hairdresser_last'))
     dp.register_callback_query_handler(top_up_hairdresser_now, Text(equals = 'top_up_hairdresser_now'))
     dp.register_callback_query_handler(top_up_eholot, Text(equals = 'top_up_eholot'))
