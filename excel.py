@@ -38,7 +38,7 @@ def append_values(range_name, x, y, z):
         return result
 
     except HttpError as error:
-        print(f"An error occurred: {error}")
+        print(f"Ошибка : {error}!!!!!!!!!!!!!!!")
         return error
 
 

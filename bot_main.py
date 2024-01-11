@@ -17,6 +17,7 @@ storage = MemoryStorage()
 bot = Bot(token = TOKEN)
 dp = Dispatcher(bot, storage=storage)
 
+
 class Form(StatesGroup):
     price = State()
     top = State()
@@ -29,6 +30,13 @@ start_kb = ReplyKeyboardMarkup().add(KeyboardButton("🔝Приход💰")).add
 earn_kb = InlineKeyboardMarkup().add(InlineKeyboardButton("Аренда", callback_data='button1')).add(InlineKeyboardButton('Продажа', callback_data='button2')).insert(InlineKeyboardButton('Парикмахерская', callback_data='button3')).add(InlineKeyboardButton('Банк', callback_data='button4')).insert(InlineKeyboardButton('Спорт_оборудование', callback_data='button5'))
 spend_kb = InlineKeyboardMarkup().add(InlineKeyboardButton("Аренда", callback_data='button_spend_1')).add(InlineKeyboardButton('Товарка', callback_data='button_spend_2')).insert(InlineKeyboardButton('Повседневные', callback_data='button_spend_3')).add(InlineKeyboardButton('Парикмахерская', callback_data='button_spend_4')).insert(InlineKeyboardButton('Спорт_оборудование', callback_data='button_spend_5'))
 
+
+async def on_startup(_):
+	print('Бот вышел в онлайн!')
+async def on_shutdown(_):
+    current_date = datetime.now().date()
+    current_time = datetime.now().time()
+    print(f'Произошла ошибка!\nДата:{current_date}\nВремя: {current_time}')
 # spend_rent_kb = InlineKeyboardMarkup().add(InlineKeyboardButton("Go Pro", callback_data='spend_rent_1')).add(InlineKeyboardButton('Пылесос', callback_data='spend_rent_2'))
 # @dp.register_message_handler(text = "🔝Приход💰")
 async def start(message: types.Message):
@@ -210,47 +218,56 @@ async def load_up_last(message: types.Message, state: FSMContext):
 #     await state.finish()
 #     await message.reply('Ok')
 
+try:
+    def register_handlers_client(dp : Dispatcher):
+        dp.register_message_handler(start, commands=['start'])
+        dp.register_message_handler(top_up, Text(equals = '🔝Приход💰'))
+        dp.register_message_handler(spend, Text(equals = '❌Расход📉'))
+        # dp.register_message_handler(analysis, Text(equals ='📝Анализ🧮'))
+        # dp.register_message_handler(top_up, commands=['start'])
 
-def register_handlers_client(dp : Dispatcher):
-    dp.register_message_handler(start, commands=['start'])
-    dp.register_message_handler(top_up, Text(equals = '🔝Приход💰'))
-    dp.register_message_handler(spend, Text(equals = '❌Расход📉'))
-    # dp.register_message_handler(analysis, Text(equals ='📝Анализ🧮'))
-    # dp.register_message_handler(top_up, commands=['start'])
+        dp.register_callback_query_handler(topup_callback_button1, Text(equals = 'button1'))
+        dp.register_callback_query_handler(topup_callback_button2, Text(equals = 'button2'))
+        dp.register_callback_query_handler(topup_callback_button3, Text(equals = 'button3'))
+        dp.register_callback_query_handler(topup_callback_button4, Text(equals = 'button4'))
+        dp.register_callback_query_handler(topup_callback_button5, Text(equals = 'button5'))
+        dp.register_callback_query_handler(spend_callback_button1, Text(equals = 'button_spend_1'))
+        dp.register_callback_query_handler(spend_callback_button2, Text(equals = 'button_spend_2'))#, state = None)
+        dp.register_callback_query_handler(spend_callback_button3, Text(equals = 'button_spend_3'))
+        dp.register_callback_query_handler(spend_callback_button4, Text(equals = 'button_spend_4'))
+        dp.register_callback_query_handler(spend_callback_button5, Text(equals = 'button_spend_5'))
+        dp.register_callback_query_handler(top_up_vacuumcleaner, Text(equals = 'top_up_vacuumcleaner'))
+        dp.register_callback_query_handler(top_up_gopro, Text(equals = 'top_up_gopro'))
+        dp.register_callback_query_handler(top_up_robot, Text(equals = 'top_up_robot'))
+        dp.register_callback_query_handler(topup_callback_button2_6l, Text(equals = 'top_up_6litr'))
+        dp.register_callback_query_handler(topup_callback_button2_8l, Text(equals = 'top_up_8litr'))
+        dp.register_callback_query_handler(top_up_hairdresser_last, Text(equals = 'top_up_hairdresser_last'))
+        dp.register_callback_query_handler(top_up_hairdresser_now, Text(equals = 'top_up_hairdresser_now'))
+        dp.register_callback_query_handler(top_up_eholot, Text(equals = 'top_up_eholot'))
+        dp.register_callback_query_handler(spend_rent_gopro, Text(equals = 'spend_gopro'))
+        dp.register_callback_query_handler(spend_rent_vacuum, Text(equals = 'spend_vacuum'))
+        # dp.register_callback_query_handler(spend_rent_robot, Text(equals = 'spend_robot'))
 
-    dp.register_callback_query_handler(topup_callback_button1, Text(equals = 'button1'))
-    dp.register_callback_query_handler(topup_callback_button2, Text(equals = 'button2'))
-    dp.register_callback_query_handler(topup_callback_button3, Text(equals = 'button3'))
-    dp.register_callback_query_handler(topup_callback_button4, Text(equals = 'button4'))
-    dp.register_callback_query_handler(topup_callback_button5, Text(equals = 'button5'))
-    dp.register_callback_query_handler(spend_callback_button1, Text(equals = 'button_spend_1'))
-    dp.register_callback_query_handler(spend_callback_button2, Text(equals = 'button_spend_2'))#, state = None)
-    dp.register_callback_query_handler(spend_callback_button3, Text(equals = 'button_spend_3'))
-    dp.register_callback_query_handler(spend_callback_button4, Text(equals = 'button_spend_4'))
-    dp.register_callback_query_handler(spend_callback_button5, Text(equals = 'button_spend_5'))
-    dp.register_callback_query_handler(top_up_vacuumcleaner, Text(equals = 'top_up_vacuumcleaner'))
-    dp.register_callback_query_handler(top_up_gopro, Text(equals = 'top_up_gopro'))
-    dp.register_callback_query_handler(top_up_robot, Text(equals = 'top_up_robot'))
-    dp.register_callback_query_handler(topup_callback_button2_6l, Text(equals = 'top_up_6litr'))
-    dp.register_callback_query_handler(topup_callback_button2_8l, Text(equals = 'top_up_8litr'))
-    dp.register_callback_query_handler(top_up_hairdresser_last, Text(equals = 'top_up_hairdresser_last'))
-    dp.register_callback_query_handler(top_up_hairdresser_now, Text(equals = 'top_up_hairdresser_now'))
-    dp.register_callback_query_handler(top_up_eholot, Text(equals = 'top_up_eholot'))
-    dp.register_callback_query_handler(spend_rent_gopro, Text(equals = 'spend_gopro'))
-    dp.register_callback_query_handler(spend_rent_vacuum, Text(equals = 'spend_vacuum'))
-    # dp.register_callback_query_handler(spend_rent_robot, Text(equals = 'spend_robot'))
+        # dp.register_callback_query_handler(load_spend, state = Form.info)
 
-    # dp.register_callback_query_handler(load_spend, state = Form.info)
+        dp.register_message_handler(load_spend, state = Form.price)
+        dp.register_message_handler(load_up, state = Form.top)
+        dp.register_message_handler(load_up_last, state = Form.top_month)
+        # dp.register_message_handler(cancel, state = "*", commands = ['отмена'])
+        # dp.register_message_handler(cancel, Text(equals='отмена', ignore_case= True), state = "*")
 
-    dp.register_message_handler(load_spend, state = Form.price)
-    dp.register_message_handler(load_up, state = Form.top)
-    dp.register_message_handler(load_up_last, state = Form.top_month)
-    # dp.register_message_handler(cancel, state = "*", commands = ['отмена'])
-    # dp.register_message_handler(cancel, Text(equals='отмена', ignore_case= True), state = "*")
+except Exception as Ex:
+    print(f"Возникла ошибка 1 {Ex} !!!!!!!!!")
 
 
+try:
+    register_handlers_client(dp)
+except Exception as Ex:
+    print(f"Возникла ошибка 2 {Ex}!!!!!!!!!")
 
-register_handlers_client(dp)
 
-if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates = True)
+
+try:
+    executor.start_polling(dp, skip_updates = True, on_startup=on_startup, on_shutdown=on_shutdown)
+except Exception as Ex:
+    print(f"Возникла ошибка 3 {Ex} !!!!!!!!!")
