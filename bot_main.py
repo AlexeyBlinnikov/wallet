@@ -9,7 +9,8 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-TOKEN = "6743689178:AAHt0ePvr3SPh3nHWn63eqZJKucoKmiv6BE"
+# TOKEN = "6743689178:AAHt0ePvr3SPh3nHWn63eqZJKucoKmiv6BE"
+TOKEN = '5524654123:AAHfHmtyG1-s1G0JtZFbQX7FInrgh9fo50g'
 
 
 storage = MemoryStorage()
@@ -51,13 +52,17 @@ async def spend(message: types.Message):
 
 
 
+
 # Приход инлайн ответ на кэлбэки первого уровня
 # ------------------------------------Приход денег, вывод новых кнопок---------------------------------
 async def topup_callback_button1(callback_query: types.CallbackQuery):
     await bot.send_message(callback_query.from_user.id, "Выбери", reply_markup = InlineKeyboardMarkup()
                             .add(InlineKeyboardButton('Пылесос', callback_data = 'top_up_vacuumcleaner'))
-							.add(InlineKeyboardButton('Go pro', callback_data = 'top_up_gopro'))
-                            .add(InlineKeyboardButton('Мойщик окон', callback_data = 'top_up_robot')))
+							.insert(InlineKeyboardButton('Ps5', callback_data = 'top_up_ps'))
+                            .add(InlineKeyboardButton('Тепловизор', callback_data = 'top_up_teplovisor'))
+                            .insert(InlineKeyboardButton('Go pro', callback_data = 'top_up_gopro'))
+                            .add(InlineKeyboardButton('Пароочиститель', callback_data = 'top_up_sc4'))
+                            .insert(InlineKeyboardButton('Мойщик окон', callback_data = 'top_up_robot')))
     await callback_query.answer()
 
 async def topup_callback_button3(callback_query: types.CallbackQuery):
@@ -93,9 +98,20 @@ async def topup_callback_button4(callback_query: types.CallbackQuery):
     xr.insert(0, "Банк")
     await bot.send_message(callback_query.from_user.id, "Введи сумму за прошлый месяц")
     await callback_query.answer()
+
 async def top_up_vacuumcleaner(callback_query: types.CallbackQuery):
     await Form.top.set()
     xr.insert(0, "Пылесос")
+    await bot.send_message(callback_query.from_user.id, "Введи сумму")
+    await callback_query.answer()
+async def top_up_playstation(callback_query: types.CallbackQuery):
+    await Form.top.set()
+    xr.insert(0, "PlayStation")
+    await bot.send_message(callback_query.from_user.id, "Введи сумму")
+    await callback_query.answer()
+async def top_up_teplovisor(callback_query: types.CallbackQuery):
+    await Form.top.set()
+    xr.insert(0, "Тепловизор")
     await bot.send_message(callback_query.from_user.id, "Введи сумму")
     await callback_query.answer()
 async def top_up_gopro(callback_query: types.CallbackQuery):
@@ -103,11 +119,17 @@ async def top_up_gopro(callback_query: types.CallbackQuery):
     xr.insert(0, "Го про")
     await bot.send_message(callback_query.from_user.id, "Введи сумму")
     await callback_query.answer()
-async def top_up_robot(callback_query: types.CallbackQuery):
+async def top_up_sc4(callback_query: types.CallbackQuery):
     await Form.top.set()
-    xr.insert(0, "Робот")
+    xr.insert(0, "Пароочиститель")
     await bot.send_message(callback_query.from_user.id, "Введи сумму")
     await callback_query.answer()
+async def top_up_robot(callback_query: types.CallbackQuery):
+    await Form.top.set()
+    xr.insert(0, "Мойщик окон")
+    await bot.send_message(callback_query.from_user.id, "Введи сумму")
+    await callback_query.answer()
+
 async def top_up_hairdresser_last(callback_query: types.CallbackQuery):
     await Form.top_month.set()
     xr.insert(0, "Парикмахерская")
@@ -130,8 +152,12 @@ async def top_up_eholot(callback_query: types.CallbackQuery):
 # Трата инлайн ответ на кэлбэки ПЕРВОГО уровня
 async def spend_callback_button1(callback_query: types.CallbackQuery):
     await bot.send_message(callback_query.from_user.id, "Вложения в:", reply_markup = InlineKeyboardMarkup()
+                            .add(InlineKeyboardButton('Плойка', callback_data = 'spend_ps5'))
+                            .insert(InlineKeyboardButton('Пылесос', callback_data = 'spend_vacuum'))
                             .add(InlineKeyboardButton('Go pro', callback_data = 'spend_gopro'))
-							.add(InlineKeyboardButton('Пылесос', callback_data = 'spend_vacuum')))
+                            .insert(InlineKeyboardButton('Пароочиститель', callback_data = 'spend_sc4'))
+                            # .add(InlineKeyboardButton('Go pro', callback_data = 'spend_gopro'))
+							.add(InlineKeyboardButton('Тепловизор', callback_data = 'spend_teplovisor')))
                             # .add(InlineKeyboardButton('Робот мойщик окон', callback_data = 'spend_robot')))
     await callback_query.answer()
 
@@ -170,12 +196,21 @@ async def spend_rent_vacuum(callback_query: types.CallbackQuery):
     xr.insert(0, "Пылесос")
     await bot.send_message(callback_query.from_user.id, "Потратил на пылесос сегодня:")
     await callback_query.answer()
-# async def spend_rent_robot(call: types.CallbackQuery):
-#     await Form.price.set()
-#     xr.insert(0, "Робот")
-#     await call.message.answer("Потратил на робота мойщика сегодня")
-#     await call.answer()
-
+async def spend_rent_ps5(call: types.CallbackQuery):
+    await Form.price.set()
+    xr.insert(0, "PlayStation")
+    await call.message.answer("Потратил на PlayStation сегодня")
+    await call.answer()
+async def spend_rent_sc4(call: types.CallbackQuery):
+    await Form.price.set()
+    xr.insert(0, "Пароочиститель")
+    await call.message.answer("Потратил на Пароочиститель сегодня")
+    await call.answer()
+async def spend_rent_teplovisor(call: types.CallbackQuery):
+    await Form.price.set()
+    xr.insert(0, "Тепловизор")
+    await call.message.answer("Потратил на Тепловизор сегодня")
+    await call.answer()
 
 # ___________________________________________
 # трата
@@ -209,14 +244,14 @@ async def load_up_last(message: types.Message, state: FSMContext):
     await bot.send_message(message.from_user.id, f"Доходы за прошлый месяц от {xr[0]} в размере: {data['price']} добавлены", reply_markup=start_kb)
     await state.finish()
 
-# # Отмена
-# async def cancel(message: types.Message, state: FSMContext):
-#     current_state = await state.get_state()
-#     if current_state is None:
-#         print("я тут")
-#         return 
-#     await state.finish()
-#     await message.reply('Ok')
+
+# Отмена ввода
+async def cancel(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state is None:
+        return 
+    await state.finish()
+    await message.reply('Ввод отменен')
 
 try:
     def register_handlers_client(dp : Dispatcher):
@@ -239,6 +274,9 @@ try:
         dp.register_callback_query_handler(top_up_vacuumcleaner, Text(equals = 'top_up_vacuumcleaner'))
         dp.register_callback_query_handler(top_up_gopro, Text(equals = 'top_up_gopro'))
         dp.register_callback_query_handler(top_up_robot, Text(equals = 'top_up_robot'))
+        dp.register_callback_query_handler(top_up_teplovisor, Text(equals = 'top_up_teplovisor'))
+        dp.register_callback_query_handler(top_up_sc4, Text(equals = 'top_up_sc4'))
+        dp.register_callback_query_handler(top_up_playstation, Text(equals = 'top_up_ps'))
         dp.register_callback_query_handler(topup_callback_button2_6l, Text(equals = 'top_up_6litr'))
         dp.register_callback_query_handler(topup_callback_button2_8l, Text(equals = 'top_up_8litr'))
         dp.register_callback_query_handler(top_up_hairdresser_last, Text(equals = 'top_up_hairdresser_last'))
@@ -246,10 +284,14 @@ try:
         dp.register_callback_query_handler(top_up_eholot, Text(equals = 'top_up_eholot'))
         dp.register_callback_query_handler(spend_rent_gopro, Text(equals = 'spend_gopro'))
         dp.register_callback_query_handler(spend_rent_vacuum, Text(equals = 'spend_vacuum'))
+        dp.register_callback_query_handler(spend_rent_ps5, Text(equals = 'spend_ps5'))
+        dp.register_callback_query_handler(spend_rent_sc4, Text(equals = 'spend_sc4'))
+        dp.register_callback_query_handler(spend_rent_teplovisor, Text(equals = 'spend_teplovisor'))
+        
         # dp.register_callback_query_handler(spend_rent_robot, Text(equals = 'spend_robot'))
 
         # dp.register_callback_query_handler(load_spend, state = Form.info)
-
+        dp.register_message_handler(cancel, state = "*", commands = ['отмена'])
         dp.register_message_handler(load_spend, state = Form.price)
         dp.register_message_handler(load_up, state = Form.top)
         dp.register_message_handler(load_up_last, state = Form.top_month)
